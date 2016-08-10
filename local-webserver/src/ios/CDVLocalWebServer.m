@@ -260,6 +260,11 @@
     GCDWebServerAsyncProcessBlock processRequestBlock = ^void (GCDWebServerRequest* request, GCDWebServerCompletionBlock complete) {
 
         NSString* filePath = [directoryPath stringByAppendingPathComponent:[request.path substringFromIndex:basePath.length]];
+        BOOL isDataDirectory = [filePath containsString: @"mobile/Containers/Data"];
+        if (isDataDirectory) {
+            filePath = [filePath stringByReplacingOccurrencesOfString: directoryPath withString: @""];
+            filePath = [filePath stringByReplacingOccurrencesOfString: @"/www" withString: @""];
+        };
         NSString* fileType = [[[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:NULL] fileType];
         GCDWebServerResponse* response = nil;
 
